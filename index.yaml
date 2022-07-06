@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   humio-instance-helm-chart:
   - apiVersion: v2
+    appVersion: 1.0.2
+    created: "2022-07-06T20:29:16.896058342Z"
+    description: Deploy a Humio Cluster using Humio Operator
+    digest: 73c5a8bcbbdc2fd0c8051047c51bb9610068a8f7adc109b2e1ca4891c3d649ba
+    name: humio-instance-helm-chart
+    type: application
+    urls:
+    - https://github.com/humio-contrib/humio-instance-helm-chart/releases/download/1.0.2/humio-instance-helm-chart-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
     appVersion: 1.0.1
     created: "2022-07-06T20:10:00.231076865Z"
     description: Deploy a Humio Cluster using Humio Operator
@@ -11,4 +21,4 @@ entries:
     urls:
     - https://github.com/humio-contrib/humio-instance-helm-chart/releases/download/1.0.1/humio-instance-helm-chart-1.0.1.tgz
     version: 1.0.1
-generated: "2022-07-06T20:10:00.230232943Z"
+generated: "2022-07-06T20:29:16.895244768Z"
