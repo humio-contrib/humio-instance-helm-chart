@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "container-release-with-help-demo.name" -}}
+{{- define "humio-instance.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "container-release-with-help-demo.fullname" -}}
+{{- define "humio-instance.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "container-release-with-help-demo.chart" -}}
+{{- define "humio-instance.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "container-release-with-help-demo.labels" -}}
-helm.sh/chart: {{ include "container-release-with-help-demo.chart" . }}
-{{ include "container-release-with-help-demo.selectorLabels" . }}
+{{- define "humio-instance.labels" -}}
+helm.sh/chart: {{ include "humio-instance.chart" . }}
+{{ include "humio-instance.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +45,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "container-release-with-help-demo.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "container-release-with-help-demo.name" . }}
+{{- define "humio-instance.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "humio-instance.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "container-release-with-help-demo.serviceAccountName" -}}
+{{- define "humio-instance.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "container-release-with-help-demo.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "humio-instance.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
