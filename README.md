@@ -1,1 +1,1 @@
-# humio-instance-help-chart
+# humio-instance-helm-chart
