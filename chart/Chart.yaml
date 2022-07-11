@@ -1,5 +1,5 @@
 apiVersion: v2
-name: humio-instance-helm-chart
+name: humio-cluster
 description: Deploy a Humio Cluster using Humio Operator
 # A chart can be either an 'application' or a 'library' chart.
 #
