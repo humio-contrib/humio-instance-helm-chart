@@ -53,10 +53,46 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "humio-instance.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "humio-instance.fullname" .) .Values.serviceAccount.name }}
+{{- define "humio-instance.humio.serviceAccountName" -}}
+{{- if .Values.humio.serviceAccount.create }}
+{{- default (include "humio-instance.fullname" .) .Values.humio.serviceAccount.name }}
 {{- else }}
-{{- default "default" .Values.serviceAccount.name }}
+{{- default "default" .Values.humio.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+
+
+{{/*
+Create the zookeeper service
+*/}}
+{{- define "humio-instance.externalService.zookeeper" -}}
+{{- if .Values.zookeeper.enabled }}
+{{- printf "%s-%s" .Release.Name "zookeeper-client:2181" }}
+{{- else }}
+{{- default "default" .Values.zookeeper.externalHostname }}
+{{- end }}
+{{- end }}
+
+{{/*
+Create the kafka service
+*/}}
+{{- define "humio-instance.externalService.kafka" -}}
+{{- if .Values.kafka.enabled }}
+{{- printf "%s-%s" .Release.Name "kafkacluster-kafka-bootstrap:9092" }}
+{{- else }}
+{{- default "default" .Values.kafka.externalHostname }}
+{{- end }}
+{{- end }}
+
+
+
+{{- define "humio-instance.persistance.storageclass" -}}
+{{- if .Values.platform eq "Azure" }}
+{{- printf "managed-csi-premium" }}
+{{- else if .Values.platform eq "AWS" }}
+{{- printf "gp3" }}
+{{- else }}
+{{- printf "default" }}
 {{- end }}
 {{- end }}

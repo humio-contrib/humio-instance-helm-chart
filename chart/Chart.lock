@@ -1,0 +1,12 @@
+dependencies:
+- name: zookeeper
+  repository: https://charts.pravega.io
+  version: 0.2.14
+- name: kafkacluster
+  repository: file://charts/kafkacluster
+  version: 0.1.0
+- name: s3proxy
+  repository: https://ryanfaircloth.github.io/s3proxy/
+  version: 3.0.2
+digest: sha256:12fe609f9a0f0650ef084a83e54e290eae150dc5a857ed5bd4390fdc24ae6c91
+generated: "2022-07-08T11:57:16.498577-04:00"

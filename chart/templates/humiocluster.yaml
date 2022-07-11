@@ -1,0 +1,138 @@
+apiVersion: core.humio.com/v1alpha1
+kind: HumioCluster
+metadata:
+  name: {{ include "humio-instance.fullname" . }}
+  labels:
+    {{- include "humio-instance.labels" . | nindent 4 }}
+spec:
+  initServiceAccountName: {{ include "humio-instance.humio.serviceAccountName" . }}
+  authServiceAccountName: {{ include "humio-instance.humio.serviceAccountName" . }}
+  humioServiceAccountName: {{ include "humio-instance.humio.serviceAccountName" . }}
+
+  resources:
+    {{- toYaml .Values.humio.resources | nindent 4 }}
+  {{- with .Values.humio.affinity }}
+  affinity:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}  
+  nodeCount: {{ .Values.humio.nodeCount }}
+
+
+  autoRebalancePartitions: true
+  dataVolumePersistentVolumeClaimSpecTemplate:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1.5Ti
+    storageClassName:  openebs-lvmpv
+  digestPartitionsCount: 720
+  environmentVariables:
+
+  - name: ZOOKEEPER_URL
+    value: {{ include "humio-instance.externalService.zookeeper" . | quote }}
+  - name: KAFKA_SERVERS
+    value:  {{ include "humio-instance.externalService.kafka" . | quote }}
+
+  #Object Storage config
+  - name: USING_EPHEMERAL_DISKS
+    value: "true"
+  - name: S3_STORAGE_PREFERRED_COPY_SOURCE
+    value: "true"
+
+{{- if .Values.s3proxy.enabled }}
+  - name: S3_STORAGE_PATH_STYLE_ACCESS
+    value: "true"
+  - name: S3_STORAGE_IBM_COMPAT
+    value: "true"
+  - name:  BUCKET_STORAGE_IGNORE_ETAG_UPLOAD 
+    value: "true"
+  - name:  BUCKET_STORAGE_IGNORE_ETAG_AFTER_UPLOAD 
+    value: "true"
+  - name: BUCKET_STORAGE_SSE_COMPATIBLE
+    value: "true"
+  - name: S3_STORAGE_ENDPOINT_BASE
+    value: http://{{ .Release.Name }}-s3proxy
+  - name: S3_STORAGE_ENCRYPTION_KEY
+    value: "off"
+  - name: S3_STORAGE_ACCESSKEY
+    valueFrom:
+      secretKeyRef:
+        key: AWS_ACCESS_KEY_ID
+        name: {{ .Release.Name }}-s3proxy-secret
+  - name: S3_STORAGE_SECRETKEY
+    valueFrom:
+      secretKeyRef:
+        key: AWS_SECRET_ACCESS_KEY
+        name: {{ .Release.Name }}-s3proxy-secret
+  - name: S3_STORAGE_BUCKET
+    value: storage
+
+  - name: S3_ARCHIVING_PATH_STYLE_ACCESS
+    value: "true"
+
+  - name: S3_EXPORT_PATH_STYLE_ACCESS
+    value: "true"
+{{- else }}
+{{- end }}
+
+  - name: AUTHENTICATION_METHOD
+    value: saml
+  - name: AUTO_CREATE_USER_ON_SUCCESSFUL_LOGIN
+    value: "true"
+  - name: AUTO_UPDATE_GROUP_MEMBERSHIPS_ON_SUCCESSFUL_LOGIN
+    value: "true"
+  - name: PUBLIC_URL
+    value: "https://{{ .Values.humio.fqdn }}"
+  - name: SAML_IDP_SIGN_ON_URL
+    value: {{ .Values.humio.sso.signOnUrl }}
+  - name: SAML_IDP_ENTITY_ID
+    value: {{ .Values.humio.sso.entityID }}
+  - name: SAML_GROUP_MEMBERSHIP_ATTRIBUTE
+    value: memberOf
+  # - name: SMTP_HOST
+  #   value: 
+  # - name: SMTP_USERNAME
+  #   value: 
+  # - name: SMTP_SENDER_ADDRESS
+  #   value: "humioalerts@${var.domain_name}"
+  # - name: SMTP_PASSWORD
+  #   value: 
+  # - name: SMTP_PORT
+  #   value: "587"
+  # - name: SMTP_USE_STARTTLS
+  #   value: "true"
+  - name: HUMIO_JVM_ARGS
+    value: -Xss2m -Xms2g -Xmx6g -server -XX:MaxDirectMemorySize=6g -XX:+UnlockDiagnosticVMOptions
+      -XX:CompileCommand=dontinline,com/humio/util/HotspotUtilsJ.dontInline -Xlog:gc+jni=debug:stdout
+      -Dakka.log-config-on-start=on -Xlog:gc*:stdout:time,tags -Dzookeeper.client.secure=false
+  - name: ENABLE_EVENT_FORWARDING
+    value: "true"
+  - name: ENABLE_FDR_POLLING_ON_NODE
+    value: "true"
+  # - name: ENFORCE_AUDITABLE
+  #   value: "true"
+
+  esHostname: es-{{ .Values.humio.fqdn }}
+  esHostnameSource: {}
+  extraKafkaConfigs: security.protocol=PLAINTEXT
+  hostname: {{ .Values.humio.fqdn }}
+  hostnameSource: {}
+  #docker pull humio/humio-core:1.44.0--SNAPSHOT--build-202719--SHA-42e56cd3a842391d66aa09f273f6ce3d4b46c018
+  image: humio/humio-core:1.47.0--SNAPSHOT--build-211337--SHA-b91ec735ae40454a1088e351fdc84f497f73b7d4
+  ingress: {}
+  license:
+    secretKeyRef:
+      key: license
+      name: "{{ include "humio-instance.fullname" . }}-license"
+  storagePartitionsCount: 24
+  targetReplicationFactor: 2
+  tls:
+    enabled: false
+  tolerations:
+  - effect: NoSchedule
+    key: beta.humio.com/humiocluster
+    operator: Exists
+  - effect: NoSchedule
+    key: beta.humio.com/storage
+    operator: Exists
