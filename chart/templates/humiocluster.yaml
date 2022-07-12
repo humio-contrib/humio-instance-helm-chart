@@ -17,6 +17,10 @@ spec:
   {{- end }}  
   nodeCount: {{ .Values.humio.nodeCount }}
 
+  {{- with .Values.humio.tolerations }}
+  tolerations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}  
 
   autoRebalancePartitions: true
   dataVolumePersistentVolumeClaimSpecTemplate:
@@ -129,10 +133,3 @@ spec:
   targetReplicationFactor: 2
   tls:
     enabled: false
-  tolerations:
-  - effect: NoSchedule
-    key: beta.humio.com/humiocluster
-    operator: Exists
-  - effect: NoSchedule
-    key: beta.humio.com/storage
-    operator: Exists

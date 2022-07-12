@@ -1,0 +1,44 @@
+humio:
+  fqdn: humio.hql.guru
+  rootUser: ryan@dss-i.com
+  license:
+  sso:
+    idpCertificate:
+    signOnUrl:
+    entityID:
+
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                  - amd64
+              - key: kubernetes.io/os
+                operator: In
+                values:
+                  - linux
+  ingress:
+    enabled: true
+    annotations:
+      appgw.ingress.kubernetes.io/ssl-redirect: "true"
+      appgw.ingress.kubernetes.io/appgw-ssl-certificate: "key name in vault"
+    className: azure-application-gateway
+s3proxy:
+  env:
+    - name: JCLOUDS_PROVIDER
+      value: azureblob
+    - name: JCLOUDS_IDENTITY
+      value: ""
+    - name: JCLOUDS_CREDENTIAL
+      value: ""
+    - name: JCLOUDS_AZUREBLOB_TENANTID
+      value: ""
+    - name: JCLOUDS_ENDPOINT
+      value: "https://fixme.blob.core.windows.net"
+    - name: JCLOUDS_AZUREBLOB_AUTH
+      value: azureKey
+    - name: JCLOUDS_AZUREBLOB_ACCOUNT
+      value: ""
