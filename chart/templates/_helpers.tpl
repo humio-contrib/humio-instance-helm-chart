@@ -68,7 +68,7 @@ Create the zookeeper service
 */}}
 {{- define "humio-instance.externalService.zookeeper" -}}
 {{- if .Values.zookeeper.enabled }}
-{{- printf "%s-%s" .Release.Name "zookeeper-client:2181" }}
+{{- printf "%s-%s" .Release.Name "zookeeper-headless:2181" }}
 {{- else }}
 {{- default "default" .Values.zookeeper.externalHostname }}
 {{- end }}

@@ -20,10 +20,18 @@ version: 1.1.0
 # It is recommended to use it with quotes.
 appVersion: "1.1.0"
 dependencies:
+  # - name: humio-operator
+  #   version: "0.14.2"
+  #   repository: "https://humio.github.io/humio-operator"
+  #   condition: humio-operator.enabled
   - name: zookeeper
-    version: "0.2.14"
-    repository: "https://charts.pravega.io"
+    version: "10.0.2"
+    repository: "https://charts.bitnami.com/bitnami"
     condition: zookeeper.enabled
+  - name: strimzi-kafka-operator
+    version: "0.29.0"
+    repository: "https://strimzi.io/charts/"
+    condition: kafka-operator.enabled
   - name: kafkacluster
     version: "0.1.0"
     repository: "file://charts/kafkacluster"

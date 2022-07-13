@@ -123,7 +123,7 @@ spec:
   hostname: {{ .Values.humio.fqdn }}
   hostnameSource: {}
   #docker pull humio/humio-core:1.44.0--SNAPSHOT--build-202719--SHA-42e56cd3a842391d66aa09f273f6ce3d4b46c018
-  image: humio/humio-core:1.47.0--SNAPSHOT--build-211337--SHA-b91ec735ae40454a1088e351fdc84f497f73b7d4
+  image: humio/humio-core:1.49.0--SNAPSHOT--build-221444--SHA-0af75e279860444ccd33455e15deea59225ff8ab
   ingress: {}
   license:
     secretKeyRef:
