@@ -30,7 +30,6 @@ spec:
       requests:
         storage: 1.5Ti
     storageClassName:  openebs-lvmpv
-  digestPartitionsCount: 720
   environmentVariables:
 
   - name: ZOOKEEPER_URL
@@ -119,16 +118,17 @@ spec:
 
   esHostname: es-{{ .Values.humio.fqdn }}
   esHostnameSource: {}
-  extraKafkaConfigs: security.protocol=PLAINTEXT
+  extraKafkaConfigs: {{ include "humio-instance.externalService.kafkaExtraConfig" . | quote }}
   hostname: {{ .Values.humio.fqdn }}
   hostnameSource: {}
-  #docker pull humio/humio-core:1.44.0--SNAPSHOT--build-202719--SHA-42e56cd3a842391d66aa09f273f6ce3d4b46c018
-  image: humio/humio-core:1.49.0--SNAPSHOT--build-221444--SHA-0af75e279860444ccd33455e15deea59225ff8ab
+  image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+  
   ingress: {}
   license:
     secretKeyRef:
       key: license
       name: "{{ include "humio-instance.fullname" . }}-license"
+  digestPartitionsCount: 720
   storagePartitionsCount: 24
   targetReplicationFactor: 2
   tls:

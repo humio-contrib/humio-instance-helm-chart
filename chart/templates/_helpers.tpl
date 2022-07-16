@@ -85,6 +85,13 @@ Create the kafka service
 {{- end }}
 {{- end }}
 
+{{- define "humio-instance.externalService.kafkaExtraConfig" -}}
+{{- if .Values.kafka.enabled }}
+{{- print "security.protocol=PLAINTEXT"  }}
+{{- else }}
+{{- default "" .Values.kafka.kafkaExtraConfig }}
+{{- end }}
+{{- end }}
 
 
 {{- define "humio-instance.persistance.storageclass" -}}
