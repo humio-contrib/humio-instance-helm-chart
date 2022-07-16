@@ -1,0 +1,9 @@
+humio:
+  config:
+    dataVolumePersistentVolumeClaimSpecTemplate:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1.5Ti
+      storageClassName: openebs-lvmpv

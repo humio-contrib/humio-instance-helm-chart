@@ -22,14 +22,12 @@ spec:
     {{- toYaml . | nindent 4 }}
   {{- end }}  
 
-  autoRebalancePartitions: true
+  
   dataVolumePersistentVolumeClaimSpecTemplate:
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 1.5Ti
-    storageClassName:  openebs-lvmpv
+  {{- with .Values.humio.config.dataVolumePersistentVolumeClaimSpecTemplate }}  
+    {{- toYaml . | nindent 4 }}
+  {{- end }}  
+
   environmentVariables:
 
   - name: ZOOKEEPER_URL
@@ -92,29 +90,27 @@ spec:
   - name: SAML_IDP_ENTITY_ID
     value: {{ .Values.humio.sso.entityID }}
   - name: SAML_GROUP_MEMBERSHIP_ATTRIBUTE
-    value: memberOf
-  # - name: SMTP_HOST
-  #   value: 
-  # - name: SMTP_USERNAME
-  #   value: 
-  # - name: SMTP_SENDER_ADDRESS
-  #   value: "humioalerts@${var.domain_name}"
-  # - name: SMTP_PASSWORD
-  #   value: 
-  # - name: SMTP_PORT
-  #   value: "587"
-  # - name: SMTP_USE_STARTTLS
-  #   value: "true"
+    value: {{ .Values.humio.sso.groupMembershipAttribute | default "memberOf" }}
+  {{- if .Values.humio.config.smtp.enabled }}  
+  - name: SMTP_HOST
+    value: {{ .Values.humio.config.smtp.host }}
+  - name: SMTP_USERNAME
+    value: {{ .Values.humio.config.smtp.username }}
+  - name: SMTP_PASSWORD
+    value: {{ .Values.humio.config.smtp.password }}
+  - name: SMTP_SENDER_ADDRESS
+    value: {{ .Values.humio.config.smtp.sender }}
+  - name: SMTP_PORT
+    value: {{ .Values.humio.config.smtp.port | quote }}
+  - name: SMTP_USE_STARTTLS
+    value: {{ .Values.humio.config.smtp.startTLS | quote }}
+  {{- end }}
   - name: HUMIO_JVM_ARGS
-    value: -Xss2m -Xms2g -Xmx6g -server -XX:MaxDirectMemorySize=6g -XX:+UnlockDiagnosticVMOptions
-      -XX:CompileCommand=dontinline,com/humio/util/HotspotUtilsJ.dontInline -Xlog:gc+jni=debug:stdout
-      -Dakka.log-config-on-start=on -Xlog:gc*:stdout:time,tags -Dzookeeper.client.secure=false
-  - name: ENABLE_EVENT_FORWARDING
+    value: {{ .Values.humio.config.jvmARGS | quote }}
+  {{- range .Values.humio.config.enableFeatures }}
+  - name: ENABLE_{{ . | upper}}
     value: "true"
-  - name: ENABLE_FDR_POLLING_ON_NODE
-    value: "true"
-  # - name: ENFORCE_AUDITABLE
-  #   value: "true"
+  {{- end }}
 
   esHostname: es-{{ .Values.humio.fqdn }}
   esHostnameSource: {}
@@ -128,8 +124,9 @@ spec:
     secretKeyRef:
       key: license
       name: "{{ include "humio-instance.fullname" . }}-license"
-  digestPartitionsCount: 720
-  storagePartitionsCount: 24
-  targetReplicationFactor: 2
+  autoRebalancePartitions: {{ .Values.humio.config.autoRebalancePartitions }}
+  digestPartitionsCount: {{ .Values.humio.config.digestPartitionsCount }}
+  storagePartitionsCount: {{ .Values.humio.config.storagePartitionsCount }}
+  targetReplicationFactor: {{ .Values.humio.config.targetReplicationFactor }}
   tls:
     enabled: false

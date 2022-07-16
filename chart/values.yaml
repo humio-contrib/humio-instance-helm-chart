@@ -10,6 +10,30 @@ humio:
   image:
     repository: humio/humio-core
     tag: "1.42.1"
+  config:
+    autoRebalancePartitions: true
+    digestPartitionsCount: 720
+    storagePartitionsCount: 24
+    targetReplicationFactor: 2
+    smtp:
+      enabled: false
+      host: ""
+      username: ""
+      password: ""
+      sender:
+      port: 587
+      startTLS: true
+    jvmARGS: -Xss2m -Xms2g -Xmx6g -server -XX:MaxDirectMemorySize=6g -XX:+UnlockDiagnosticVMOptions -XX:CompileCommand=dontinline,com/humio/util/HotspotUtilsJ.dontInline -Xlog:gc+jni=debug:stdout -Dakka.log-config-on-start=on -Xlog:gc*:stdout:time,tags -Dzookeeper.client.secure=false
+    enableFeatures:
+    - FOWARDING
+    - FDR_POLLING_ON_NODE
+    dataVolumePersistentVolumeClaimSpecTemplate:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1.5Ti
+      storageClassName:  openebs-lvmpv
   nodeCount: 3
   serviceAccount:
     # Specifies whether a service account should be created
