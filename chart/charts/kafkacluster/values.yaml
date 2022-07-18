@@ -31,7 +31,7 @@ kafka:
     #class: managed-csi-premium
 
 zookeeper:
-  replicas: 3
+  replicas: 5
   resources:
     requests:
       memory: 3Gi

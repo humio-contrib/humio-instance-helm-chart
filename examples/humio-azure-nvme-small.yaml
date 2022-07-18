@@ -1,0 +1,26 @@
+humio:
+  #using 6 nodes ensures that a node/host can fail and the AZ will not fail
+  nodeCount: 6
+  resources:
+    requests:
+      # Increase the memory as needed to support more than 5/TB day
+      memory: 16Gi
+      #Note the following resources are expected to support 1-3 TB/Day however
+      # storage is sized for 1TB/day increase the storage to match the expected load
+      cpu: 4
+    limits:
+      memory: 32Gi
+      cpu: 8
+  config:
+    dataVolumePersistentVolumeClaimSpecTemplate:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Ti
+      storageClassName: openebs-lvmpv
+#This deployment of ZK is used by humio and is not shared with Kafka
+zookeeper:
+  persistence: 
+    storageClass: managed-csi-premium
+    size: 2Gi

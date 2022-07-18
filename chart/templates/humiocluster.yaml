@@ -117,7 +117,7 @@ spec:
   extraKafkaConfigs: {{ include "humio-instance.externalService.kafkaExtraConfig" . | quote }}
   hostname: {{ .Values.humio.fqdn }}
   hostnameSource: {}
-  image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+  image: "{{ .Values.humio.image.repository }}:{{ .Values.humio.image.tag }}"
   
   ingress: {}
   license:

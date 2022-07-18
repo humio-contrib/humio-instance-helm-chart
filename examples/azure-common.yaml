@@ -1,4 +1,0 @@
-zookeeper:
-  persistence: 
-    storageClass: managed-csi-premium
-    size: 2Gi

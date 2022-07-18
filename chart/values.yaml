@@ -1,12 +1,11 @@
 platform: Azure
 
-replicaCount: 3
-
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
 humio:
+  replicaCount: 3
   image:
     repository: humio/humio-core
     tag: "1.42.1"
@@ -25,15 +24,15 @@ humio:
       startTLS: true
     jvmARGS: -Xss2m -Xms2g -Xmx6g -server -XX:MaxDirectMemorySize=6g -XX:+UnlockDiagnosticVMOptions -XX:CompileCommand=dontinline,com/humio/util/HotspotUtilsJ.dontInline -Xlog:gc+jni=debug:stdout -Dakka.log-config-on-start=on -Xlog:gc*:stdout:time,tags -Dzookeeper.client.secure=false
     enableFeatures:
-    - FOWARDING
-    - FDR_POLLING_ON_NODE
+      - FOWARDING
+      - FDR_POLLING_ON_NODE
     dataVolumePersistentVolumeClaimSpecTemplate:
       accessModes:
-      - ReadWriteOnce
+        - ReadWriteOnce
       resources:
         requests:
           storage: 1.5Ti
-      storageClassName:  openebs-lvmpv
+      storageClassName: openebs-lvmpv
   nodeCount: 3
   serviceAccount:
     # Specifies whether a service account should be created
@@ -66,7 +65,7 @@ humio:
 
 zookeeper:
   enabled: true
-  replicaCount: 3
+  replicaCount: 5
   fourlwCommandsWhitelist: srvr, mntr, ruok, stat
   pdb:
     create: true
