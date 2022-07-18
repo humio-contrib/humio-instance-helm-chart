@@ -72,43 +72,6 @@ zookeeper:
   metrics:
     enabled: true
 
-#This ZK instance is used by Humio and is not shared with Kafka
-# zookeeper-operator:
-#   enabled: true
-#   crd:
-#     create: true
-
-# zookeeper:
-#   enabled: true
-#   #If enabled is false externalHostname should be fqdn:port used to connect
-#   #externalHostname:
-#   triggerRollingRestart: true
-#   pod:
-#     resources:
-#       requests:
-#         cpu: 200m
-#         memory: 256Mi
-#       limits:
-#         cpu: 1
-#         memory: 1Gi
-#     affinity:
-#       nodeAffinity:
-#         requiredDuringSchedulingIgnoredDuringExecution:
-#           nodeSelectorTerms:
-#             - matchExpressions:
-#                 - key: kubernetes.io/arch
-#                   operator: In
-#                   values:
-#                     - amd64
-#                 - key: kubernetes.io/os
-#                   operator: In
-#                   values:
-#                     - linux
-#   persistence:
-#     storageClassName: managed-csi-premium
-#     reclaimPolicy: Delete
-#     volumeSize: 4Gi
-
 kafka-operator:
   enabled: true
 
