@@ -11,6 +11,33 @@ humio:
     limits:
       memory: 32Gi
       cpu: 8
+
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: beta.humio.com/storage
+                operator: In
+                values:
+                  - nvme
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                  - amd64
+              - key: kubernetes.io/os
+                operator: In
+                values:
+                  - linux
+
+  tolerations:
+    - effect: NoSchedule
+      key: beta.humio.com/humiocluster
+      operator: Exists
+    - effect: NoSchedule
+      key: beta.humio.com/storage
+      operator: Exists
+
   config:
     dataVolumePersistentVolumeClaimSpecTemplate:
       accessModes:
@@ -21,6 +48,6 @@ humio:
       storageClassName: openebs-lvmpv
 #This deployment of ZK is used by humio and is not shared with Kafka
 zookeeper:
-  persistence: 
+  persistence:
     storageClass: managed-csi-premium
     size: 2Gi

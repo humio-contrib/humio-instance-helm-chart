@@ -5,4 +5,4 @@ helm upgrade --install --namespace humio \
     -f examples/kafka-azure-$1.yaml \
     -f examples/common.yaml \
     -f .values.yaml \
-    small chart/
+    $1 chart/

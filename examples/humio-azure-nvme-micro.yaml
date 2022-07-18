@@ -11,6 +11,20 @@ humio:
     limits:
       memory: 8Gi
       cpu: 4
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                  - amd64
+              - key: kubernetes.io/os
+                operator: In
+                values:
+                  - linux
+
   config:
     dataVolumePersistentVolumeClaimSpecTemplate:
       accessModes:
@@ -18,10 +32,10 @@ humio:
       resources:
         requests:
           storage: 100Gi
-      storageClassName: openebs-lvmpv
+      storageClassName: managed-csi-premium
 #This deployment of ZK is used by humio and is not shared with Kafka
 zookeeper:
   replicaCount: 3
-  persistence: 
+  persistence:
     storageClass: managed-csi-premium
     size: 2Gi
