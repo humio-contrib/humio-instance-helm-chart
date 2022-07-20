@@ -2,6 +2,37 @@ apiVersion: v1
 entries:
   humio-cluster:
   - apiVersion: v2
+    appVersion: 1.5.0
+    created: "2022-07-20T16:57:25.905789434Z"
+    dependencies:
+    - condition: humio-operator.enabled
+      name: humio-operator
+      repository: https://humio.github.io/humio-operator
+      version: 0.15.0
+    - condition: zookeeper.enabled
+      name: zookeeper
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.0.2
+    - condition: kafka-operator.enabled
+      name: strimzi-kafka-operator
+      repository: https://strimzi.io/charts/
+      version: 0.29.0
+    - condition: kafka.enabled
+      name: kafkacluster
+      repository: file://charts/kafkacluster
+      version: 0.1.0
+    - condition: s3proxy.enabled
+      name: s3proxy
+      repository: https://ryanfaircloth.github.io/s3proxy/
+      version: '>=3.0.1'
+    description: Deploy a Humio Cluster using Humio Operator
+    digest: 037b4a276a0f3953cf912ea8a5c5f2e8ee353044b803a0583325c0d314150d2c
+    name: humio-cluster
+    type: application
+    urls:
+    - https://github.com/humio-contrib/humio-instance-helm-chart/releases/download/1.5.0/humio-cluster-1.5.0.tgz
+    version: 1.5.0
+  - apiVersion: v2
     appVersion: 1.4.0
     created: "2022-07-18T20:09:46.855595142Z"
     dependencies:
@@ -157,4 +188,4 @@ entries:
     urls:
     - https://github.com/humio-contrib/humio-instance-helm-chart/releases/download/1.0.1/humio-instance-helm-chart-1.0.1.tgz
     version: 1.0.1
-generated: "2022-07-18T20:09:46.843527531Z"
+generated: "2022-07-20T16:57:25.887894227Z"
