@@ -20,10 +20,10 @@ version: 1.3.0
 # It is recommended to use it with quotes.
 appVersion: "1.3.0"
 dependencies:
-  # - name: humio-operator
-  #   version: "0.14.2"
-  #   repository: "https://humio.github.io/humio-operator"
-  #   condition: humio-operator.enabled
+  - name: humio-operator
+    version: "0.15.0"
+    repository: "https://humio.github.io/humio-operator"
+    condition: humio-operator.enabled
   - name: zookeeper
     version: "10.0.2"
     repository: "https://charts.bitnami.com/bitnami"

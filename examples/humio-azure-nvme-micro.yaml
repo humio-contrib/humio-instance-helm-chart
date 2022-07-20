@@ -9,6 +9,7 @@ humio:
       # storage is sized for 1TB/day increase the storage to match the expected load
       cpu: 2
     limits:
+      #A good rule of thumb calculation for memory allocation is: (8 GB baseline + 1 GB per core) on-heap memory (set with -Xmx and -Xms) + (8 GB + 1GB per core) off-heap memory (set with -XX:MaxDirectMemorySize)
       memory: 8Gi
       cpu: 4
   affinity:

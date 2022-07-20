@@ -22,7 +22,17 @@ humio:
       sender:
       port: 587
       startTLS: true
-    jvmARGS: -Xss2m -Xms2g -Xmx6g -server -XX:MaxDirectMemorySize=6g -XX:+UnlockDiagnosticVMOptions -XX:CompileCommand=dontinline,com/humio/util/HotspotUtilsJ.dontInline -Xlog:gc+jni=debug:stdout -Dakka.log-config-on-start=on -Xlog:gc*:stdout:time,tags -Dzookeeper.client.secure=false
+    jvmARGS:
+      ""
+      # -server -Xss2m
+      # -XX:MaxRAMPercentage=75.0
+      # -XX:+UseParallelGC -XX:+UseNUMA
+      # -XX:+UseTransparentHugePages
+      # -XX:+UnlockDiagnosticVMOptions
+      # -XX:CompileCommand=dontinline,com/humio/util/HotspotUtilsJ.dontInline
+      # -Xlog:gc+jni=debug:stdout
+      # -Xlog:gc*:stdout:time,tags
+      # -Dakka.log-config-on-start=on -Dzookeeper.client.secure=false
     enableFeatures:
       - FOWARDING
       - FDR_POLLING_ON_NODE

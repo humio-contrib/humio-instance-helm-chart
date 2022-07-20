@@ -1,4 +1,7 @@
 dependencies:
+- name: humio-operator
+  repository: https://humio.github.io/humio-operator
+  version: 0.15.0
 - name: zookeeper
   repository: https://charts.bitnami.com/bitnami
   version: 10.0.2
@@ -11,5 +14,5 @@ dependencies:
 - name: s3proxy
   repository: https://ryanfaircloth.github.io/s3proxy/
   version: 3.0.2
-digest: sha256:4b3209282610e094dac3990ac27e535c0e1ff2e1f1cad6d2da56f2e07db561be
-generated: "2022-07-13T09:29:29.970714-04:00"
+digest: sha256:486c6a217875625db49d99c8ce3bac92bcbec8db224d2285d44daa111354c28a
+generated: "2022-07-19T15:06:26.799579-04:00"
