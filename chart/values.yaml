@@ -58,8 +58,8 @@ humio:
     port: 80
 
   ingress:
-    enabled: false
-    className: ""
+    enabled: true
+    className: "ngnix"
     annotations: {}
 
     tls: []
