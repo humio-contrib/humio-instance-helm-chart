@@ -111,8 +111,22 @@ spec:
   - name: ENABLE_{{ . | upper}}
     value: "true"
   {{- end }}
-
-  esHostname: es-{{ .Values.humio.fqdn }}
+  - name: HUMIO_LOG4J_CONFIGURATION
+    value: "/var/lib/humio/config/logging/log4j2-json-k8s.xml"
+  - name:  HUMIO_JVM_LOG_OPTS
+    value: "-Xlog:jit*=debug:file=/app/humio/logs/jit_humio.log:time,tags:filecount=5,filesize=1024000 -Xlog:gc+jni=debug -Xlog:gc*:file=/app/humio/logs/gc_humio.log:time,tags:filecount=5,filesize=102400"
+  extraHumioVolumeMounts:
+    - name: "{{ include "humio-instance.fullname" . }}-loggingconfig"
+      mountPath: /var/lib/humio/config/logging
+      readOnly: true
+    - name: java-logs
+      mountPath: /app/humio/logs
+  extraVolumes:
+    - name: "{{ include "humio-instance.fullname" . }}-loggingconfig"
+      configMap:
+        name: "{{ include "humio-instance.fullname" . }}-loggingconfig"
+    - name: java-logs
+      emptyDir: {}      
   esHostnameSource: {}
   extraKafkaConfigs: {{ include "humio-instance.externalService.kafkaExtraConfig" . | quote }}
   hostname: {{ .Values.humio.fqdn }}
