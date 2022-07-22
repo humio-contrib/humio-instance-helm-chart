@@ -62,10 +62,7 @@ humio:
     className: "ngnix"
     annotations: {}
 
-    tls: []
-    #  - secretName: chart-example-tls
-    #    hosts:
-    #      - chart-example.local
+    tls: true
 
   nodeSelector: {}
 
